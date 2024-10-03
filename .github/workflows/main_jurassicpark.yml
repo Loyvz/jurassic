@@ -22,6 +22,11 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Set up JDK 17  # Agregar este paso para configurar Java 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+
       - name: Create and start virtual environment
         run: |
           python -m venv venv
@@ -86,3 +91,4 @@ jobs:
         with:
           app-name: 'jurassicpark'
           slot-name: 'Production'
+
