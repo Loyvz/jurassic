@@ -26,7 +26,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '17'
-          distribution: 'temurin'  # Añadir distribución de JDK
+          distribution: 'temurin'
 
       - name: Create and start virtual environment
         run: |
@@ -41,6 +41,7 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@v1.7
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          JAVA_HOME: ${{ env.JAVA_HOME_17_X64 }}  # Asegurar que SonarCloud use Java 17
         with:
           args: >
             -Dsonar.organization=broncosaurio
