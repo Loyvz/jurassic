@@ -37,8 +37,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.organization=tu_organizacion
-            -Dsonar.projectKey=tu_projectKey
+            -Dsonar.organization=broncosaurio
+            -Dsonar.projectKey=broncosaurio_jurassic
             -Dsonar.python.version=3.12
 
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
