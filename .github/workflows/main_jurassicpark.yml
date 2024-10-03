@@ -30,6 +30,17 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
         
+      # Aquí agregamos el paso para SonarCloud
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v1.7
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.organization=tu_organizacion
+            -Dsonar.projectKey=tu_projectKey
+            -Dsonar.python.version=3.12
+
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
       - name: Zip artifact for deployment
@@ -75,4 +86,3 @@ jobs:
         with:
           app-name: 'jurassicpark'
           slot-name: 'Production'
-          
