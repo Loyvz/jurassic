@@ -32,25 +32,18 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      # Instalar SonarScanner manualmente y verificar si está disponible
+      # Instalar SonarScanner manualmente
       - name: Install SonarScanner
         run: |
           wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.0.2747-linux.zip
           unzip sonar-scanner-cli-4.7.0.2747-linux.zip
           mv sonar-scanner-4.7.0.2747-linux sonar-scanner
           chmod +x $GITHUB_WORKSPACE/sonar-scanner/bin/sonar-scanner
-          export PATH=$GITHUB_WORKSPACE/sonar-scanner/bin:$PATH
 
-      # Verificar si SonarScanner se instaló correctamente
-      - name: Check SonarScanner installation
-        run: |
-          ls -la $GITHUB_WORKSPACE/sonar-scanner/bin
-          sonar-scanner -v
-
-      # Ejecutar el análisis de SonarCloud con Java 17
+      # Ejecutar el análisis de SonarCloud con la ruta completa de SonarScanner
       - name: SonarCloud Scan
         run: |
-          sonar-scanner \
+          $GITHUB_WORKSPACE/sonar-scanner/bin/sonar-scanner \
             -Dsonar.organization=broncosaurio \
             -Dsonar.projectKey=broncosaurio_jurassic \
             -Dsonar.python.version=3.12
