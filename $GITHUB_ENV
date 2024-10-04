@@ -1,0 +1,1 @@
+"export PATH=$PATH:$GITHUB_WORKSPACE/sonar-scanner/bin" 

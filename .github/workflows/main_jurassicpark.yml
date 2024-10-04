@@ -1,7 +1,3 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-# More info on Python, GitHub Actions, and Azure App Service: https://aka.ms/python-webapps-actions
-
 name: Build and deploy Python app to Azure Web App - jurassicpark
 
 on:
@@ -22,7 +18,7 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Set up JDK 17  # Configurar Java 17
+      - name: Set up JDK 17  # Configurar Java 17 para SonarScanner
         uses: actions/setup-java@v3
         with:
           java-version: '17'
@@ -32,7 +28,7 @@ jobs:
         run: |
           python -m venv venv
           source venv/bin/activate
-      
+
       - name: Install dependencies
         run: pip install -r requirements.txt
 
@@ -43,14 +39,14 @@ jobs:
           unzip sonar-scanner-cli-4.7.0.2747-linux.zip
           mv sonar-scanner-4.7.0.2747-linux sonar-scanner
           chmod +x $GITHUB_WORKSPACE/sonar-scanner/bin/sonar-scanner
-          echo "export PATH=$PATH:$GITHUB_WORKSPACE/sonar-scanner/bin" >> $GITHUB_ENV
+          export PATH=$PATH:$GITHUB_WORKSPACE/sonar-scanner/bin
           export SONAR_SCANNER_OPTS="-server"
 
       # Verificar si SonarScanner está disponible
       - name: Verify SonarScanner installation
         run: sonar-scanner -v
 
-      # Aquí agregamos el paso para SonarCloud
+      # Ejecutar el análisis de SonarCloud
       - name: SonarCloud Scan
         run: |
           sonar-scanner \
@@ -61,8 +57,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           JAVA_HOME: ${{ env.JAVA_HOME_17_X64 }}
 
-      # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
-
+      # Zip para la fase de despliegue
       - name: Zip artifact for deployment
         run: zip release.zip ./* -r
 
@@ -81,7 +76,7 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write # Esto es requerido para solicitar el JWT
+      id-token: write # Necesario para solicitar el JWT
 
     steps:
       - name: Download artifact from build job
@@ -95,9 +90,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_48E4E3045AF04D6F9D1327A321B344D2 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_330CDB7463DD499EB14A07E6AAD5EACC }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_84797D469BF0406E8CCE595332357595 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
