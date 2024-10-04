@@ -40,12 +40,13 @@ jobs:
           mv sonar-scanner-4.7.0.2747-linux sonar-scanner
           chmod +x $GITHUB_WORKSPACE/sonar-scanner/bin/sonar-scanner
 
-      # Ejecutar el análisis de SonarCloud con la ruta completa de SonarScanner
+      # Ejecutar el análisis de SonarCloud con la URL correcta
       - name: SonarCloud Scan
         run: |
           $GITHUB_WORKSPACE/sonar-scanner/bin/sonar-scanner \
             -Dsonar.organization=broncosaurio \
             -Dsonar.projectKey=broncosaurio_jurassic \
+            -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.python.version=3.12
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
