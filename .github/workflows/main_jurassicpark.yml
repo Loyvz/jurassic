@@ -32,22 +32,11 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      # Instalar SonarScanner manualmente
-      - name: Install SonarScanner
-        run: |
-          wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.0.2747-linux.zip
-          unzip sonar-scanner-cli-4.7.0.2747-linux.zip
-          mv sonar-scanner-4.7.0.2747-linux sonar-scanner
-          chmod +x $GITHUB_WORKSPACE/sonar-scanner/bin/sonar-scanner
-          export PATH="$GITHUB_WORKSPACE/sonar-scanner/bin:$PATH"  # Ajustar PATH directamente
-
-      # Ejecutar el análisis de SonarCloud
+      # Utilizar la acción oficial de SonarCloud
       - name: SonarCloud Scan
-        run: |
-          sonar-scanner \
-            -Dsonar.organization=broncosaurio \
-            -Dsonar.projectKey=broncosaurio_jurassic \
-            -Dsonar.python.version=3.12
+        uses: SonarSource/sonarcloud-github-action@v1
+        with:
+          projectBaseDir: .
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           JAVA_HOME: ${{ env.JAVA_HOME_17_X64 }}
@@ -95,3 +84,4 @@ jobs:
         with:
           app-name: 'jurassicpark'
           slot-name: 'Production'
+
