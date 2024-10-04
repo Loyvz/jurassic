@@ -32,15 +32,26 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      # Utilizar la acción oficial de SonarCloud y forzar el uso de Java 17
+      # Instalar SonarScanner manualmente
+      - name: Install SonarScanner
+        run: |
+          wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.0.2747-linux.zip
+          unzip sonar-scanner-cli-4.7.0.2747-linux.zip
+          mv sonar-scanner-4.7.0.2747-linux sonar-scanner
+          chmod +x $GITHUB_WORKSPACE/sonar-scanner/bin/sonar-scanner
+          export PATH=$GITHUB_WORKSPACE/sonar-scanner/bin:$PATH
+
+      # Ejecutar el análisis de SonarCloud con Java 17
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v1
-        with:
-          projectBaseDir: .
+        run: |
+          sonar-scanner \
+            -Dsonar.organization=broncosaurio \
+            -Dsonar.projectKey=broncosaurio_jurassic \
+            -Dsonar.python.version=3.12
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           JAVA_HOME: ${{ env.JAVA_HOME_17_X64 }}
-          SONAR_JAVA_VERSION: '17'  # Forzar uso de Java 17
+          SONAR_JAVA_VERSION: '17'
 
       # Zip para la fase de despliegue
       - name: Zip artifact for deployment
@@ -85,4 +96,5 @@ jobs:
         with:
           app-name: 'jurassicpark'
           slot-name: 'Production'
+
 
