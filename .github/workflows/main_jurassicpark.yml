@@ -32,7 +32,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      # Instalar SonarScanner manualmente
+      # Instalar SonarScanner manualmente y verificar si está disponible
       - name: Install SonarScanner
         run: |
           wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.0.2747-linux.zip
@@ -40,6 +40,12 @@ jobs:
           mv sonar-scanner-4.7.0.2747-linux sonar-scanner
           chmod +x $GITHUB_WORKSPACE/sonar-scanner/bin/sonar-scanner
           export PATH=$GITHUB_WORKSPACE/sonar-scanner/bin:$PATH
+
+      # Verificar si SonarScanner se instaló correctamente
+      - name: Check SonarScanner installation
+        run: |
+          ls -la $GITHUB_WORKSPACE/sonar-scanner/bin
+          sonar-scanner -v
 
       # Ejecutar el análisis de SonarCloud con Java 17
       - name: SonarCloud Scan
@@ -96,5 +102,3 @@ jobs:
         with:
           app-name: 'jurassicpark'
           slot-name: 'Production'
-
-
