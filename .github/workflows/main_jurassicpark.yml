@@ -39,12 +39,7 @@ jobs:
           unzip sonar-scanner-cli-4.7.0.2747-linux.zip
           mv sonar-scanner-4.7.0.2747-linux sonar-scanner
           chmod +x $GITHUB_WORKSPACE/sonar-scanner/bin/sonar-scanner
-          export PATH=$PATH:$GITHUB_WORKSPACE/sonar-scanner/bin
-          export SONAR_SCANNER_OPTS="-server"
-
-      # Verificar si SonarScanner está disponible
-      - name: Verify SonarScanner installation
-        run: sonar-scanner -v
+          export PATH="$GITHUB_WORKSPACE/sonar-scanner/bin:$PATH"  # Ajustar PATH directamente
 
       # Ejecutar el análisis de SonarCloud
       - name: SonarCloud Scan
